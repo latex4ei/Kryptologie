@@ -1,0 +1,496 @@
+% .:: Laden der LaTeX4EI Formelsammlungsvorlage
+\documentclass[fs]{latex4ei}
+
+% Dokumentbeschreibung
+\title{Kryptologie EI SoSe 2011}
+\author{Emanuel Regnath}
+%\watermark{ \centering \put(50,-500){ \includegraphics {./img/watermarkDIN4.pdf} } }
+
+
+%Kopf- und Fußzeile
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+
+   \fancyfoot[C]{von Emanuel Regnath (Emanuel.Regnath@tum.de)}
+   \renewcommand{\headrulewidth}{0.0pt} %obere Linie ausblenden
+   \renewcommand{\footrulewidth}{0.1pt} %obere Linie ausblenden
+
+   \fancyfoot[R]{Stand: \today \ um \thistime \ Uhr \qquad \thepage}
+   \fancyfoot[L]{Homepage: emareg.de -  Fehler bitte sofort melden.}
+	
+
+\newcommand{\GF}{\ensuremath{\mathrm{GF}}}									%ggT
+	
+	
+% Dokumentbeginn
+% ======================================================================
+\begin{document}
+
+
+% Aufteilung in Spalten
+\begin{multicols}{4}
+
+% -------------------------------------------
+% | 		KRYPTOLOGIE						|
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%=======================================================================
+
+
+
+% SECTION ====================================================================================
+\section{Kryptologie - Allgemeines}
+% ============================================================================================
+	\begin{tabular}{@{}ll}
+	Kryptographie & Entwicklung und Anwendung von Verschlüsselungen.\\
+	Kryptoanalyse & Testen und knacken von Verschlüsselungen.\\
+	Steganographie & Verbergen von geheimen Botschaften.\\ 
+	%LSBs von digitalen Daten manipulieren.
+	\end{tabular}
+
+	\subsection{Entwicklung von Algorithmen}
+	Bewährtes Vorgehen: Öffentliche Entwicklung von Algorithmen. Große Zahl von Schlüsseln. Nur Schlüssel geheim.\\
+	\begin{tabular}{ll}
+		symmetrisch & gleicher Schlüssel für Ver- und Entschlüsselung.\\
+		asymmetrisch & öffentlicher und privater Schlüssel.
+	\end{tabular}
+	
+	\subsection{Kryptoanalyse}
+	\begin{tabular}{ll}
+		Brute-Force & Vollständiges Durchsuchen des Schlüsselraums.\\
+		Ciphertext-only & einer oder mehrere Chiffretexte sind bekannt.\\
+		Known-plaintext & Einige Chiffre wie auch Klartext bekannt.\\
+		Chosen-plaintext & wählbarer zu verschlüsselnder Text.\\
+		Häufigkeitsanalyse & Buchstabenhäufigkeit einer Sprache.
+	\end{tabular}
+
+
+	\subsection{perfekte Sicherheit}
+	ist gewährleistet, wenn $|M| = |C| = |K|$
+	die Länge der Nachricht, des Chiffrats und des Schlüssels gleich lang ist und alle Chiffre gleich wahrscheinlich sind.
+
+
+	\textbf{Kerckhoffs'sches Prinzip:} Die Sicherheit eines Kryptosystems darf nicht von der Geheimhaltung des Algorithmus abhängen, sondern nur von der Geheimhaltung des Schlüssels!
+	\\
+	Shannon:\\
+	Große Konfusion: Jede Chiffrekombination soll gleich wahrscheinlich auftreten\\
+	Große Diffusion: Jede kleine Änderung am Klartext oder Schlüssel soll eine große Änderung im Chiffre bewirken.
+	Sicherheit gegen bekannte Angriffe.\\
+
+
+% SECTION ====================================================================================
+\section{Mathematische Grundlagen}
+% ============================================================================================
+
+Euklidscher Satz: $a = q \cdot n + r$ \qquad $r = a \mod n$\\
+$a \mod n = a \mod (-n)$\\
+$a + i\cdot n \mod n = a \mod n = r$\\
+$(a_1 + a_2) \mod n = (a_1 \mod n + a_2 \mod n) \mod n$\\
+$(a_1 \cdot a_2) \mod n = (a_1 \mod n \cdot a_2 \mod n) \mod n$\\
+		
+	\subsection{größter gemeinsamer Teiler $\ggT$}
+	$\mathrm{ggT}(a,0) = |a|$ \quad	$\ggT(a+i\cdot n,n) = \ggT(a,n)$\\		
+	Rekursive Definition: $\ggT(a,n) := \ggT(n,a \mod n)$\\
+
+	
+	\subsection{Algebraische Systeme}
+	Eine Algebraische Struktur ist eine Menge $S$ mit einer oder mehreren binären Verknüpfungen $*:S\times S \rightarrow S$, die bestimmte Axiome erfüllen.\\
+	\begin{tabular}{l|p{3.5cm}}
+		Struktur & Definition \\ \hline
+		Halbgruppe $(S,*)$ & $*$ ist assoziativ \\
+		Monoid $(S,*)$ & Halbgruppe mit neutralem Element $e$\\
+		Gruppe $(S,*)$ & Monoid mit Inversem $^{-1}$\\
+		Abelsche Gruppe $(S,*)$ & Gruppe, so dass $*$ kommutativ ist.\\
+		Ring $(S,+,\cdot)$ & $(S,+)$ ist abelsche Gruppe, $(S,\cdot)$ ist Halbgruppe 
+			und es gilt das Distributivgesetz \\
+		Körper(Field) $(S,+,\cdot)$ & Ring, so dass $(S\setminus\{ 0 \}, \cdot)$ abelsche Gruppe ist. (Multiplikativ Inverse)\\
+	\end{tabular}\\
+	Ordnung der Gruppe $\# \N_n = n$\\
+	
+	Kommutativer Ring: 
+	abelsche Gruppe $\langle S,\oplus \rangle$
+	und Monoid $\langle S,\odot \rangle$
+	
+	\subsection{Modulo-Arithmetik}
+	Additiv Inverses $-a + a = 0 \mod n$\\
+	Multiplikativ Inverse $a^{-1} \cdot a = 1 \mod n$\\ 
+	$a^{-1}$ existiert nur, wenn $\ggT(a,n) = 1$\\
+
+	$(a_1 + a_2) \mod n = ( a_1 \mod n + a_2 \mod n) \mod n$\\
+	$(a_1 \cdot a_2) \mod n = ( a_1 \mod n \cdot a_2 \mod n) \mod n$\\
+	??$(a_1 \cdot a_2) \mod n = (n-r) \cdot (n-r) \mod n$??
+
+	\subsection{Polynome}
+	Der Galois-Körper $GF(p) = \langle \mathbb Z_p, + \mod p, \cdot \mod p \rangle$ ist besonders wichtig.\\
+	$GF(2) = \R_n[x]$ mit Koeffizienten $a_i = \eset{1,0}$\\
+	Andere Darstellung: $x^3 + x - 1 = 1 x^3 + 0 x^2 + 1x^1 + 1x^0 = 1011$\\
+	
+	
+		\subsubsection{Division $A(x) : M(x) = C(x) + R(x)$}
+		Immer höchste 1 von $A(x)$ mit XOR $M(X)$ auslöschen, dann Positionen der $M(x)$ zählen.\\
+		\begin{tabular}{lllllllll}
+		& 10011 & : & 101 = 101 R 10\\
+		$\oplus$ & 101 & & \\ \mrule
+		 & 00111 & & \\
+		$\oplus$ & \quad 101 & \\ \mrule
+		 & \quad 010
+		\end{tabular}
+		
+		\subsubsection{Modulo Polynom $A(x) \mod M(x) = R(x)$}
+		Wie Polynomdivision, der Rest $R(x)$ ist gesucht.\\ 
+		$M(x)$ solange mit XOR durchschieben bis Polynom kleiner $M(x)$\\
+		$1101 \mod 11 = 1$, \quad $10011 \mod 101 = 10$\\
+	
+		
+	Nullstellenfreiheit bedingt nicht irreduzibilität.\\
+
+	Falls Polynom gerade $\Ra$ Wurzel ziehen\\
+	\\
+	\subsection{Quadratzahlen}
+	Quadratzahlen: $y = a^x \mod p$ \\
+	Zu jedem Quadratischen Rest gibt es zwei mögliche Wurzeln\\
+	Jacobitest: $J(a,p) = a^{\frac{p-1}{2}} \mod p$\\
+	$J(a,p) = 1 \mod p \Ra$ Quadratischer Rest \\
+	$J(a,p) = -1 \mod p \Ra$ Quadratischer NichtRest (keine Wurzel)\\
+	Trick: $a = \pm a^{\frac{p+1}{2}} = \pm (a^2)^{\frac{p+1}{4}} \mod p$ falls $p \mod 4 = 3$\\
+	Falls $p$ nicht Prim, dann Durchlauf für jede Teilprimzahl. Ergebnis miteinander multiplizieren. 
+	2 Teilprimzahlen $\Ra$ 4 Ergebnisse
+
+
+	\subsection{Euklidischer Algorithmus}
+	Euklidischer Algorithmus: $\ggT(544,323) = 17$ bestimmen.\\
+	\begin{tabular}{ll}
+		$544 =$ & $1 \cdot 323 + 221$\\
+		$323 =$ & $1 \cdot 221 + 102$\\
+		$221 =$ & $2 \cdot 102 + 17$\\
+		$102 =$ & $6 \cdot \boldsymbol{17} + 0$\\
+	\end{tabular}
+	\subsection{Erweiterter Euklidischer Algorithmus}	
+	wird benutzt um die multiplikative Inverse $a^{-1}$ zu bestimmen\\
+	$\ggT(a,n) = v_{\ir end} a + u_{\ir end} n$\\	
+	Bestimme $42^{-1} \mod 97$ \qquad Berechne $\ggT(42,97)$\\
+	%$1_1 = \floor{\frac{92}{42}} = 2$\\
+	\begin{tabular}{@{}rll@{}}
+		$97 =$ & $1 \cdot 97$ & $+ 0 \cdot 42$\\
+		$42 =$ & $0 \cdot 97$ & $+ 1 \cdot 42$\\ \mrule
+		$97 - 2\cdot 42 =$ & $(1-2\cdot 0) \cdot 97$ & $+ (0 - 2 \cdot 1) 42$\\
+		$13 =$ & $1 \cdot 97$ & $-2 \cdot 42$\\ \mrule
+		$42 - 3 \cdot 13 =$ & $(0 - 3 \cdot 1) \cdot 97$ & $(1 + (-3)(-2)) \cdot 42$\\  
+		$3 =$ & $-3 \cdot 97$ & $+ 7 \cdot 42$\\  \mrule
+		$13 - 4 \cdot 3 =$ & $(1 - 4(-3)) \cdot 97$ & $+ (-2- 4 \cdot 7) \cdot 42$\\  
+		$1 =$ & $\underset{=0}{13 \cdot 97}$ & $\boldsymbol{- 30} \cdot 42$\\  
+	\end{tabular}
+	
+	 
+	
+	
+% SECTION ====================================================================================
+\section{Sicherheitsdienste}
+% ============================================================================================
+	\begin{itemize}\itemsep0pt
+		\item Verbindlichkeit, Nachweisbarkeit (Nicht-Abstreitbarkeit)
+		\item Authentifikation (Identitätsnachweis)
+		\item Integrität (Unverändert?)\vspace{0.4em}
+		\item Vertraulichkeit (Geheimhaltung)
+		\item Anonymität\vspace{0.4em}
+		\item Berechtigung (Zugangskontrolle)
+	\end{itemize}
+	
+	
+	
+
+	\subsection{OSI Sicherheitsarchitektur}
+	\begin{tabular}{l|c|l}
+		Was kann passieren? & \framebox{Bedrohungen} & Abhören,Manipulation\\
+		Sicherheitsgrad? & \framebox{Regeln} \\
+		Gegenmaßnahmen? & \framebox{Sicherheitsdienste} & Vertraulichkeit\\
+		Hilfmittel? & \framebox{Mechanismen} & Verschlüsselung\\
+		Verfahren? & \framebox{Algorithmen} & AES\\
+	\end{tabular}
+
+
+	\subsection{MAC -- Message Authentification Code}
+	64,128 oder 160 bit Wert um Integrität und Authentizität nachweisen. \\
+	Initwert $I$, $MAC = g(m,k, g(m,k,...))$\\
+	
+	\subsection{Einwegfunktionen}
+	Bsp: Multiplikation von zwei großen Primzahlen.
+
+	\subsection{Krypto-Hash-Funktionen}
+	Nicht bijektive Einwegfunktion um lange Nachrichten auf kurze Hashwerte abzubilden.
+	 $h(m)$
+
+
+% SECTION ====================================================================================
+\section{Verschlüsselungsverfahren}
+% ============================================================================================
+
+Verschlüsselung ist eine bijektive Abbildung: $f:M \leftrightarrow C$\\
+$m$: Klartext, $c$: Chiffre, $k$: Schlüssel\\
+symmetrisch: $c=f(k,m)$ \qquad $m=f^{-1}(k,c)$\\
+Anzahl der Schlüssel bei $n$ Teilnehmern: $|K| = \frac{n(n-1)}{2}$\\
+asymmetrisch: $c=f_e(m)$ \qquad $m=f_d(c)$\\
+Sender \textbf{ver}schlüsselt mit \textbf{fremden} öffentlichen Schlüssel. Empfänger \textbf{ent}schlüsselt mit \textbf{eigenem} privaten Schlüssel.\\
+
+
+
+
+	\subsection{Permutationsalgorithmen}
+	Vertauschen der Buchstabenpositionen in einem Text. 
+		
+		\subsubsection{Skytala}
+		500 v. Chr. in Sparta: Aufwickeln eines Gürtels auf einen Stock.\\
+	
+
+	\subsection{Substitutions-Algorithmen}
+	Jeweils ein Klartextbuchstabe wird durch einen Chiffrebuchstaben ersetzt.\\
+	Kann oft durch Häufigkeitsanalyse (HA) gebrochen werden.
+
+		\begin{tabular}{lll}
+			Ceasarcode & 1 Fester Verschiebungsschlüssel & $26$\\
+			Vigenère-Chiffre & $r$ periodische Schlüssel & $26^r$\\
+			Verman-Chiffre & binär, einmalig, Strom-Chiffre & $\infty$\\
+			Enigma & 3 aus 5 Rotationsscheiben & $~10^{23}$
+		\end{tabular}
+		
+	
+	Caesar: $C_k = in + k \mod 26$\\
+	Caesar arbeitet auf einer Gruppe $\langle \Z_26, + \mod 26 \rangle$\\
+	Vigenère: Polyalphabetische Substitution.\\
+		Angriff: Wiederholung von Buchstabenfolgen, Primfaktoren ergeben Schlüssellänge, dann HA\\
+		Schlüssellänge $h$ für Koinzidenzindex $k$: $h \approx (k_d - k_r) n / [(n-1) k - k_rn + k_d]$
+
+
+
+	\subsection{Blockchiffre}
+	Blockweise Verschlüsselung.
+	Typische Blocklänge: 64Bit, typische Schlüssellänge 128Bit -- 256Bit.\\
+	
+	
+		\subsection{DES}
+		Digital Encryption Standard
+		64-Schlüssel bestehend aus 56 Bit + 8 Parity Bits\\
+		Permutation und Shifts nötig, damit jedes Schlüsselbit jedes Textbit beeinflussen kann.
+		Insgesamt 28 Bit Schlüsselshifts
+	
+			F-Funktion: Expansion von 32 Textbits auf 48 durch Bitverdopplung.
+			Aufteilung in 8 mal 6 Bit: S-Funktion: 1. und 6. Bit bestimmen Zeile:
+			\begin{tabular}{l|lll}
+				& 0000 & 0001 & ...\\ \hline
+				00 & \\
+				01 & \\
+				10 & \\
+				11 & \\
+			\end{tabular}
+			S-Bos ist einzige nichtlinearität\\
+			S-Box hat 6 inputs und 4 outputs
+	
+		Verschlüsselung: $R_{16} = L_{15} \otimes F(R_{15}, k_{16})$
+	
+	
+		\subsubsection{IDEA}
+	
+	
+	
+		\subsubsection{AES}
+		Blocklänge: 128Bit; Schlüssellänge: 128Bit - 256Bit.\\
+		Modulpolynom $M(x) = x^8 + x^4 + x^3 + x + 1 = \eset{100011011}$
+		Substitution ist die einzige nichtlineare Operation.\\
+	
+	
+	
+		\subsubsection{Block-Operations-Modi}
+		\begin{itemize}
+			\item ECB (electronic Codeblock): Jeder Block wird unabhänig verschlüsselt. Sollte nur für Nachrichten $< 1$ Block verwendet werden.
+			\item CBC (Cipher Block Chaining): Cipherblock wird mit nächsten Klartextblock verkettet. (XOR)
+			\item CFB (Cipher Feedback): Selbstsynchronisierende Stromchiffre.\\
+			\item OFB (Output Feedback): keine Selbssync.
+			\item CTR (Counter):
+		\end{itemize}
+		nonce: number used only once
+	
+	
+	\subsection{Stromchiffre}
+	Zeichenweise Verschlüsselung. z.B. XOR: $c_i = m_i \otimes k$ \quad $m_i = c_i \otimes k$\\
+	Kryptoanalyse: Chiffre mit 0-Folge.
+
+
+% SECTION ====================================================================================
+\section{Asymmetrische Verfahren}
+% ============================================================================================
+	\subsection{Potenzen in Arithmetik modulo n}
+	$y = a^x \mod p$\\
+	\begin{tabular}{c|lllll}
+	$x\backslash q$ & 0 & 1 & 2 & 3 & 4 \\ \mrule
+	1 & 0 & 1 & 2 & 3 & 4 \\
+	2 & 0 & 1 & 4 & 4 & 1 \\
+	3 & 0 & 1 & 3 & 2 & 4 \\
+	4 & 0 & 1 & 1 & 1 & 1 \\
+	\end{tabular}\\
+	\\
+	Kleiner Satz von Fermat: \boxed{ a^{p-1} \mod p = 1 }, falls $\ggT(a,p)=1$\\
+	$a = 2 \lor a = 3$ sind Generatorelemente.\\
+	\\
+	Eulersche $\Phi$-Funktion: $\Phi(n) = | \iset{ z \in [1,n-1]}{\ggT(n,z) = 1} |$\\
+	Es gilt $\Phi(p) = p-1$ und $\Phi(p \cdot q) = (p-1)(q-1)$ für $p \ne q$\\
+	Euler's Satz: $a^{\Phi(n)} \equiv 1\ (\!\!\!\!\mod n)$ \qquad $a^{k \Phi(n) + 1} \equiv a\ (\!\!\!\!\mod n)$\\ 
+	$a^j \mod n = a^{j \mod \Phi(n)} \mod n$\\
+
+
+	\subsection{Fermat-Test für $n$}
+	Falls für jedes $a < n$ mit $\ggT(a,n) = 1$ gilt $a^{n-1} \ne 1 \mod n$, dann
+	ist $n$ vermutlich prim 
+
+	
+	\subsection{Miller-Rabin-Test}
+	$(n-1) / a^s = d \in \N$ \quad größtes $s$, so dass $d \in \N$\\
+	Falls $n$ prim, dann entweder $a^d = l \mod n$ \\
+	oder $\exists r \le s-1: a^{2^r d} = -1$\\
+	
+	\subsection{Chinesischer Restsatz}
+	Sind zwei Reste $a = x \mod p$ und $b = x \mod q$ mit $n = pq$ bekannt, dann kann
+	$x \mod n$ berechnet werden:
+	
+	
+	
+	\subsection{RSA}
+	Erzeugung eines Schlüsselpaares: 
+	\begin{enumerate}
+		\item $n = p \cdot q$ mit $p \ne q$
+		\item Wähle ersten Schlüssel $e$ zufällig mit $1 < e < \Phi(n)$ und $\ggT(e,\Phi(n)) = 1$
+		\item Berechne privaten Schlüssel $d$ durch $e \cdot d \equiv 1 \mod \Phi(n)$
+	\end{enumerate}	
+	
+	\begin{tabular}{ll}
+	Verschlüsselung & $c = (m^e) \mod n$\\
+	Entschlüsselung & $(c^d) \mod n = (m^e)^d \mod n = m$\\
+	Signatur & $s = (m^d) \mod n$\\
+	Verifikation & $(s^e) \mod n = (m^d)^e \mod n = m$\\
+	\end{tabular}
+		
+		\subsection{Diffie-Hellman-Schlüsselvereinbarung (1976)}
+		Protokoll um öffentlich einen geheimen Schlüssel $k$ zu vereinbaren. Bietet jedoch keine Authentifizierung.
+		Vereinbarung kann öffentlich abgehört werden ohne Sicherheit zu gefährden.\\
+		\\
+		Beide Partner Alice und Bob vereinbaren eine 1024Bit Primzahl $p$ und eine Basis $g \in \GF(p)$ daraus wird der gemeinsame Schlüssel $k$ abgeleitet.\\
+		\begin{tabular}{l|l}
+			Alice & Bob\\
+			wählt geheime Zufallszahl $a$ & wählt geheime Zufallszahl $b$\\
+			berechnet $\alpha = g^a \mod p$ & berechnet $\beta = g^b \mod p$\\
+			schickt $\alpha$ an Bob & schickt $\beta$ an Alice\\
+			berechnet $k = \beta^a \mod p$ & berechnet $k = \alpha^b \mod p$\\
+		\end{tabular}
+		Es gilt $\beta^a = \alpha^b = g^{ba}$	
+
+
+		\subsection{ElGamal-Verfahren (1984)}
+		Öffentlich bekannt: Primzahl $p$ und Basis $g \in \GF(p)$\\
+		Jeder Teilnehmer wählt einen privaten Schlüssel $d$ und berechnet daraus den öffentlichen Schlüssel $e = g^d \mod p$
+
+
+	\subsection{Elliptische Kurven, ECC Kryptographie}
+	Befinden sich auf einem 2D Galios Field (Torus)\\
+	Ist unendlich lang\\
+	Sicherheitsvergleich: 160Bit ECC entspricht 1024Bit RSA.\\
+	Elliptische Kurve: \boxed{y^2 = x^3 +ax + b}
+	Diskrete Punkte ergeben sich aus Schnittpunkten zwischen der el. Kurve und einer Gerade. Die Koordinaten
+	der Schnittpunkte müssen ganzzahlig sein.
+
+
+
+% SECTION ====================================================================================
+\section{Hashfunktionen}
+% ============================================================================================
+Nicht Kryptographisch: Datenbanken\\
+Kryptographisch: Passwörter, Fingerabdruck, Zertifikat:\\
+	keyed (MAC) and unkeyed (MDC)\\
+\\
+Anforderungen (Resistance):
+\begin{description}
+	\item[Preimage] Einweg: schwierig zu $h$ ein $m$ mit $h = h(m)$ zu finden
+	\item[2nd Preimage] schwierig $m_2$ mit $h(m_2) = h(m_1)$ zu finden
+	\item[Collision:] schwierig $m_1,m_2$ mit $h(m_2) = h(m_1)$ zu finden
+\end{description}
+
+\subsection{MD5}
+
+
+\subsection{SHA}
+
+
+\subsection{Keccak25}
+Neue Hashfunktion mit anderem Ansatz als bestehende Hashfunktion(SHA,MD5)\\
+3D: state, 2D: plane, slice, sheet, 1D: row, column, lane 0D: bit\\
+$R = i \xi \pi \rho \theta$\\
+$\theta:$ Ausummieren der Säulen zu einem Bit:\\
+$\rho:$ Sheet-Permutation\\
+$\pi:$ Spaltenpermutationsmatrix \\
+$\xi:$ Lanepermutation: $L_1' = L_{1} \oplus (\neg L_2 \land L_3)$\\
+\\
+Bitrate $r$, Kapazität $c$, statesize $b = r+c$
+
+
+
+
+
+\subsection{Protokolle}
+Definition: Satz von Regeln für den Austausch von Daten zwischen Kommunikationspartnern.\\
+
+Fiat-Shamir Authentifizierung:\\
+Schlüsselbank: $n = p \cdot q$; $n$ öffentlich; $p,q$ geheim\\
+Für jeden Teilnehmer Zufallszahl $z_i$ und Geheimnis $s_i$
+
+
+Kerberos (sym.)
+Trustet Third Party TTP:\\
+
+Needham Schroeder Protokoll (asym.)
+
+
+
+Square and Multiply (L to R) Algorithmus:\\
+
+
+
+\section{IT-Sicherheit}
+	- Safety: Sicher für den Menschen bei Fehlfunktion.\\
+	- Secure: Sicher gegen Angriffe.\\
+	
+	\subsection{Datensicherheit}
+	
+	
+
+	Quantencomputer: Faktorisierungsprobleme lösbar -> RSA unsicher
+					AES 128 unsicher, 256Bit noch als sicher erachtet.\\
+
+
+
+
+
+	\subsection{Symbole}
+	\begin{tabular}{lll}
+		Primzahl $p,q$ & Nat. Zahl $n,m$\\
+		Message $m$ & Cyphertext $c$\\
+		priv. key $d$ & pub. key $e$\\
+	\end{tabular}
+
+
+
+
+% Ende der Spalten
+\end{multicols}
+
+
+
+% Dokumentende
+% ======================================================================
+\end{document}
+
+
+
+
+
+
+
+
+
